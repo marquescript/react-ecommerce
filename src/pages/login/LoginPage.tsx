@@ -8,11 +8,16 @@ import { useForm } from "react-hook-form";
 import { InputErrorMessage } from "../../components/input_error_message/InputErrorMessage";
 import validator from "validator";
 
+interface LoginForm {
+    email: string;
+    password: string;
+}
+
 export const LoginPage = () => {
 
-    const {register, formState: {errors}, handleSubmit} = useForm();
+    const {register, formState: {errors}, handleSubmit} = useForm<LoginForm>();
 
-    const handleSubmitPress = (data: any) => {
+    const handleSubmitPress = (data: LoginForm) => {
 
     }
 
