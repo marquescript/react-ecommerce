@@ -38,7 +38,7 @@ export const LoginPage = () => {
 
                     <LoginInputContainer>
                         <p>Senha</p>
-                        <CustomInput placeholder="Digite sua senha" hasError={!!errors?.password} {...register("password", {required: true})}/>
+                        <CustomInput type="password" placeholder="Digite sua senha" hasError={!!errors?.password} {...register("password", {required: true})}/>
                         {errors?.password?.type === "required" && <InputErrorMessage children="Senha é obrigatório" />}
                     </LoginInputContainer>
 

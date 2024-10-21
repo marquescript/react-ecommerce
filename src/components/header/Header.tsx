@@ -16,9 +16,9 @@ export const Header = () => {
             <HeaderTitle>Ecommerce</HeaderTitle>
 
             <HeaderItems>
-                <HeaderItem>Explorar</HeaderItem>
+                <HeaderItem onClick={() => handleLoginClick("/")}>Explorar</HeaderItem>
                 <HeaderItem onClick={() => handleLoginClick("/login")}>Login</HeaderItem>
-                <HeaderItem>Criar conta</HeaderItem>
+                <HeaderItem onClick={() => handleLoginClick("/sign-up")}>Criar conta</HeaderItem>
                 <HeaderItem><BsCart3 size={25}/><span></span>5</HeaderItem>
                 <HeaderItem>Sair</HeaderItem>
             </HeaderItems>
