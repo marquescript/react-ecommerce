@@ -1,9 +1,10 @@
-import { AuthError, AuthErrorCodes, createUserWithEmailAndPassword } from "firebase/auth"
+import { AuthError, AuthErrorCodes, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import { auth, db } from "../config/firebase"
 import { SignUpForm } from "../types/SignUpForm"
 import { addDoc, collection } from "firebase/firestore";
+import { LoginForm } from "../types/LoginForm";
 
-const FormErrorKeys = {
+const SignUpFormErrorKeys = {
     email: "email" as keyof SignUpForm,
     name: "name" as keyof SignUpForm,
     lastName: "lastName" as keyof SignUpForm,
@@ -11,12 +12,23 @@ const FormErrorKeys = {
     confirmPassword: "confirmPassword" as keyof SignUpForm,
 };
 
-interface FormError {
+const LoginFormErrorKeys = {
+    email: "email" as keyof LoginForm,
+    password: "password" as keyof LoginForm,
+}
+
+interface SignUpFormError {
     campo: keyof SignUpForm;
     type: string;
 }
 
-export const createUserFirebase = async (data: SignUpForm): Promise<null | FormError> => {
+interface LoginFormError {
+    campo: keyof LoginForm;
+    type: string;
+}
+
+
+export const createUserFirebase = async (data: SignUpForm): Promise<null | SignUpFormError> => {
     try{
         const userCredentials = await createUserWithEmailAndPassword(auth, data.email, data.password);
 
@@ -33,7 +45,32 @@ export const createUserFirebase = async (data: SignUpForm): Promise<null | FormE
         const _error = error as AuthError;
         
         if(_error.code === AuthErrorCodes.EMAIL_EXISTS){
-            return {campo: FormErrorKeys.email, type: "alreadyInUse"};
+            return {campo: SignUpFormErrorKeys.email, type: "alreadyInUse"};
+        }
+
+        return null;
+    }
+}
+
+export const loginFirebase = async (data: LoginForm): Promise<null | LoginFormError> => {
+    try{
+         await signInWithEmailAndPassword(auth, data.email, data.password);
+
+        return null;
+    }catch(error){
+        const _error = error as AuthError;
+
+        if (_error.code === AuthErrorCodes.USER_DELETED){
+            return {campo: LoginFormErrorKeys.email, type: "user-not-found"}
+        }
+        if (_error.code === AuthErrorCodes.INVALID_PASSWORD){
+            return {campo: LoginFormErrorKeys.password, type: "mismatch"}
+        }
+        if (_error.code === 'auth/too-many-requests'){
+            return {campo: LoginFormErrorKeys.email, type: "too-many-requests"}
+        }
+        if (_error.code === 'auth/invalid-credential'){
+            return {campo: LoginFormErrorKeys.email, type: "invalid-credential"}
         }
 
         return null;
