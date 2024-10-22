@@ -5,29 +5,34 @@ import { LoginPage } from "./pages/login/LoginPage";
 import { SignUpPage } from "./pages/sign_up/SignUpPage";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./config/firebase";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "./contexts/UserContext";
 import { getUserFirebase } from "./service/user-service";
+import { LoggedInGuard } from "./guards/Guards";
 
 const App = () => {
 
   const { isAuthenticated, loginUser, logoutUser } = useContext(UserContext);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
-  onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, async (user) => {
 
-    //se o usuario estiver logado no contexto e nao estiver no firebase
     if(isAuthenticated && !user){
-      return logoutUser();
+      logoutUser();
+      return setIsCheckingAuth(false);
     }
 
-    //se o usuario estiver nulo no contexto e nao estiver nulo no firebase
     if(!isAuthenticated && user){
       const fetchedUser  = await getUserFirebase(user);
-      return loginUser(fetchedUser as any);
+      loginUser(fetchedUser as any);
+      return setIsCheckingAuth(false);
     }
+
+    return setIsCheckingAuth(false);
 
   })
 
+  if(isCheckingAuth) return null;
   
   return (
     <>
@@ -36,8 +41,12 @@ const App = () => {
         <Routes>
 
           <Route path="/" element={<HomePage />}/>
-          <Route path="/login" element={<LoginPage />}/>
-          <Route path="/sign-up" element={<SignUpPage />} />
+
+          <Route element={
+            <LoggedInGuard isAuthenticated={isAuthenticated} />}>
+            <Route path="/sign-up" element={<SignUpPage />} />
+            <Route path="/login" element={<LoginPage />} />
+          </Route>
 
         </Routes>
       </BrowserRouter>

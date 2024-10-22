@@ -26,16 +26,20 @@ export const Header = () => {
 
             <HeaderItems>
                 <HeaderItem onClick={() => handleLoginClick("/")}>Explorar</HeaderItem>
+
                 {!isAuthenticated && (
                     <>
                         <HeaderItem onClick={() => handleLoginClick("/login")}>Login</HeaderItem>
                         <HeaderItem onClick={() => handleLoginClick("/sign-up")}>Criar conta</HeaderItem>
                     </>
                 )}
+
                 <HeaderItem><BsCart3 size={25}/><span></span>5</HeaderItem>
+
                 {isAuthenticated && (
                     <HeaderItem onClick={handleSignOutClick}>Sair</HeaderItem>
                 )}
+                
             </HeaderItems>
 
         </HeaderContainer>
