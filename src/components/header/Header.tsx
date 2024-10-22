@@ -1,6 +1,7 @@
 import { BsCart3 } from "react-icons/bs"
 import { HeaderContainer, HeaderItem, HeaderItems, HeaderTitle } from "./header.style"
 import { useNavigate } from "react-router-dom";
+import { signOutFirebase } from "../../service/user-service";
 
 
 export const Header = () => {
@@ -9,6 +10,10 @@ export const Header = () => {
 
     const handleLoginClick = (route: string) => {
         navigate(route);
+    }
+
+    const handleSignOutClick = () => {
+        signOutFirebase();
     }
 
     return(
@@ -20,7 +25,7 @@ export const Header = () => {
                 <HeaderItem onClick={() => handleLoginClick("/login")}>Login</HeaderItem>
                 <HeaderItem onClick={() => handleLoginClick("/sign-up")}>Criar conta</HeaderItem>
                 <HeaderItem><BsCart3 size={25}/><span></span>5</HeaderItem>
-                <HeaderItem>Sair</HeaderItem>
+                <HeaderItem onClick={handleSignOutClick}>Sair</HeaderItem>
             </HeaderItems>
 
         </HeaderContainer>

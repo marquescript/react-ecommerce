@@ -1,7 +1,7 @@
-import { AuthError, AuthErrorCodes, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
-import { auth, db } from "../config/firebase"
+import { AuthError, AuthErrorCodes, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth"
+import { auth, db, googleProvider } from "../config/firebase"
 import { SignUpForm } from "../types/SignUpForm"
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, QuerySnapshot, where } from "firebase/firestore";
 import { LoginForm } from "../types/LoginForm";
 
 const SignUpFormErrorKeys = {
@@ -32,12 +32,7 @@ export const createUserFirebase = async (data: SignUpForm): Promise<null | SignU
     try{
         const userCredentials = await createUserWithEmailAndPassword(auth, data.email, data.password);
 
-        await addDoc(collection(db, "users"), {
-            id: userCredentials.user.uid,
-            name: data.name,
-            lastName: data.lastName,
-            email: userCredentials.user.email
-        });
+        await addUserInFirestore(userCredentials, data);
 
         return null;
 
@@ -75,4 +70,51 @@ export const loginFirebase = async (data: LoginForm): Promise<null | LoginFormEr
 
         return null;
     }
+}
+
+export const loginWithGoogleProviderFirebase = async () => {
+    try{
+        const userCredentials = await signInWithPopup(auth, googleProvider);
+
+        const user = await verifyUserExistsFirebase(userCredentials);
+
+        if(!user){
+            addUserInFirestore(userCredentials);
+        }
+
+    }catch(error){
+
+    }
+}
+
+const verifyUserExistsFirebase = async (userCredentials: any) => {
+    const querySnapshot = await getDocs(query(collection(db, "users"), where("id", "==", userCredentials.user.uid)))
+    return querySnapshot.docs[0]?.data();
+}
+
+
+const addUserInFirestore = async (userCredentials: any, data?: SignUpForm) => {
+
+    let name = "";
+    let lastName = "";
+
+    if(!data){
+        name = userCredentials.user.displayName?.split(" ")[0];
+        lastName = userCredentials.user.displayName?.split(" ")[1];
+    }else {
+        name = data.name;
+        lastName = data.lastName;
+    }
+
+    await addDoc(collection(db, "users"), {
+        id: userCredentials.user.uid,
+        name,
+        lastName,
+        email: userCredentials.user.email,
+    });
+}
+
+
+export const signOutFirebase = () => {
+    signOut(auth);
 }

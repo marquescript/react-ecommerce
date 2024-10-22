@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { InputErrorMessage } from "../../components/input_error_message/InputErrorMessage";
 import validator from "validator";
 import { LoginForm } from "../../types/LoginForm";
-import { loginFirebase } from "../../service/user-service";
+import { loginFirebase, loginWithGoogleProviderFirebase } from "../../service/user-service";
 
 
 
@@ -23,6 +23,10 @@ export const LoginPage = () => {
         }
     }
 
+    const handleSignInWithGooglePress = async () => {
+        await loginWithGoogleProviderFirebase();
+    }
+
     return (
         <>
             <Header />
@@ -32,7 +36,7 @@ export const LoginPage = () => {
 
                     <LoginHeadline>Entre com a sua conta</LoginHeadline>
 
-                    <CustomButton startIcon={<BsGoogle size={18} />}>Entrar com o Google</CustomButton>
+                    <CustomButton startIcon={<BsGoogle size={18} />} onClick={handleSignInWithGooglePress}>Entrar com o Google</CustomButton>
 
                     <LoginSubtitle>ou entre com seu e-mail</LoginSubtitle>
 

@@ -3,8 +3,15 @@ import "../index.css";
 import { HomePage } from "./pages/home/HomePage";
 import { LoginPage } from "./pages/login/LoginPage";
 import { SignUpPage } from "./pages/sign_up/SignUpPage";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./config/firebase";
 
 const App = () => {
+
+  onAuthStateChanged(auth, (user) => {
+    console.log(user);
+  })
+
   
   return (
     <>
