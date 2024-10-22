@@ -1,8 +1,10 @@
 import { AuthError, AuthErrorCodes, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth"
 import { auth, db, googleProvider } from "../config/firebase"
 import { SignUpForm } from "../types/SignUpForm"
-import { addDoc, collection, getDoc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, DocumentData, getDoc, getDocs, query, where } from "firebase/firestore";
 import { LoginForm } from "../types/LoginForm";
+import { userConverter } from "../converters/firestore";
+import { User } from "../types/User";
 
 const SignUpFormErrorKeys = {
     email: "email" as keyof SignUpForm,
@@ -114,8 +116,8 @@ const addUserInFirestore = async (userCredentials: any, data?: SignUpForm) => {
     });
 }
 
-export const getUserFirebase = async (user: any) => {
-    const querySnapshot = await getDocs(query(collection(db, "users"), where("id", "==", user.uid)));
+export const getUserFirebase = async (user: DocumentData) => {
+    const querySnapshot = await getDocs(query(collection(db, "users").withConverter(userConverter), where("id", "==", user.uid)));
     return querySnapshot.docs[0]?.data();
 }
 

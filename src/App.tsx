@@ -24,7 +24,7 @@ const App = () => {
 
     if(!isAuthenticated && user){
       const fetchedUser  = await getUserFirebase(user);
-      loginUser(fetchedUser as any);
+      loginUser(fetchedUser);
       return setIsCheckingAuth(false);
     }
 
