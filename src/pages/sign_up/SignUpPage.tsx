@@ -6,14 +6,8 @@ import { SignUpContainer, SignUpContent, SignUpHeadline, SignUpInputContainer } 
 import { useForm } from "react-hook-form";
 import { InputErrorMessage } from "../../components/input_error_message/InputErrorMessage";
 import validator from "validator";
-
-interface SignUpForm {
-    name: string;
-    lastName: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-}
+import { SignUpForm } from "../../types/SignUpForm";
+import { createUserFirebase } from "../../service/user-service";
 
 export const SignUpPage = () => {
 
@@ -21,8 +15,8 @@ export const SignUpPage = () => {
 
     const watchPassword = watch("password");
 
-    const handleSubmitPress = (data: SignUpForm) => {
-
+    const handleSubmitPress = async (data: SignUpForm) => {
+        await createUserFirebase(data);
     }
 
     return (
