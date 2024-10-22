@@ -1,7 +1,7 @@
 import { AuthError, AuthErrorCodes, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth"
 import { auth, db, googleProvider } from "../config/firebase"
 import { SignUpForm } from "../types/SignUpForm"
-import { addDoc, collection, getDocs, query, QuerySnapshot, where } from "firebase/firestore";
+import { addDoc, collection, getDoc, getDocs, query, where } from "firebase/firestore";
 import { LoginForm } from "../types/LoginForm";
 
 const SignUpFormErrorKeys = {
@@ -114,6 +114,10 @@ const addUserInFirestore = async (userCredentials: any, data?: SignUpForm) => {
     });
 }
 
+export const getUserFirebase = async (user: any) => {
+    const querySnapshot = await getDocs(query(collection(db, "users"), where("id", "==", user.uid)));
+    return querySnapshot.docs[0]?.data();
+}
 
 export const signOutFirebase = () => {
     signOut(auth);

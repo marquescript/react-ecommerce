@@ -5,11 +5,27 @@ import { LoginPage } from "./pages/login/LoginPage";
 import { SignUpPage } from "./pages/sign_up/SignUpPage";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./config/firebase";
+import { useContext } from "react";
+import { UserContext } from "./contexts/UserContext";
+import { getUserFirebase } from "./service/user-service";
 
 const App = () => {
 
-  onAuthStateChanged(auth, (user) => {
-    console.log(user);
+  const { isAuthenticated, loginUser, logoutUser } = useContext(UserContext);
+
+  onAuthStateChanged(auth, async (user) => {
+
+    //se o usuario estiver logado no contexto e nao estiver no firebase
+    if(isAuthenticated && !user){
+      return logoutUser();
+    }
+
+    //se o usuario estiver nulo no contexto e nao estiver nulo no firebase
+    if(!isAuthenticated && user){
+      const fetchedUser  = await getUserFirebase(user);
+      return loginUser(fetchedUser as any);
+    }
+
   })
 
   
