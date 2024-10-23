@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { signOutFirebase } from "../../service/user-service";
 import { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
+import { CustomButton } from "../buttom/CustomButton";
 
 
 export const Header = () => {
@@ -22,7 +23,7 @@ export const Header = () => {
 
     return(
         <HeaderContainer>
-            <HeaderTitle>Ecommerce</HeaderTitle>
+            <HeaderTitle onClick={() => handleLoginClick("/")}>Ecommerce</HeaderTitle>
 
             <HeaderItems>
                 <HeaderItem onClick={() => handleLoginClick("/explore")}>Explorar</HeaderItem>
