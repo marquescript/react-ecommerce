@@ -9,22 +9,26 @@ import { InputErrorMessage } from "../../components/input_error_message/InputErr
 import validator from "validator";
 import { LoginForm } from "../../types/LoginForm";
 import { loginFirebase, loginWithGoogleProviderFirebase } from "../../service/user-service";
+import { useNavigate } from "react-router-dom";
 
 
 
 export const LoginPage = () => {
 
     const {register, formState: {errors}, handleSubmit, setError} = useForm<LoginForm>();
+    const navigate = useNavigate();
 
     const handleSubmitPress = async (data: LoginForm) => {
         const response = await loginFirebase(data);
         if(response != null){
             setError(response.campo, {type: response.type})
         }
+        navigate("/");
     }
 
     const handleSignInWithGooglePress = async () => {
         await loginWithGoogleProviderFirebase();
+        navigate("/");
     }
 
     return (

@@ -1,17 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { CategoriesContainer, CategoriesContent } from "./categories.style";
-import { Category } from "../../types/Category";
 import { CategoryItem } from "../category_item/CategoryItem";
-import { getCategoriesFirebase } from "../../service/category-service";
+import { CategoryContext } from "../../contexts/CategoryContext";
 
 export const Categories = () => {
 
-    const [categories, setCategories] = useState<Category[]>([]);
-
-    const getCategories = async () => {
-        const data = await getCategoriesFirebase();
-        setCategories(data || []);
-    }
+    const { categories, getCategories } = useContext(CategoryContext);
 
     useEffect(() => {
         getCategories();

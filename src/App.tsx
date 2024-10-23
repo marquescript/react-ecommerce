@@ -38,6 +38,7 @@ const App = () => {
     <>
 
       <BrowserRouter>
+      
         <Routes>
 
           <Route path="/" element={<HomePage />}/>
