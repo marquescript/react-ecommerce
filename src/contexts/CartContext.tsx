@@ -22,6 +22,12 @@ export const CartContextProvider = ({children}: {children: ReactNode}) => {
     const [products, setProducts] = useState<Cart[]>([]);
 
     const addProductToCart = (product: Product) => {
+        const productInCart = products.some((item) => item.id === product.id);
+        if(productInCart){
+            const newProducts = products.map(item => item.id === product.id ? 
+                {...item, quantity: item.quantity + 1} : item);
+            return setProducts(newProducts);
+        }
         setProducts([...products, {...product, quantity: 1}]);
     }
 

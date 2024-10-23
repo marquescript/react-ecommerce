@@ -11,7 +11,7 @@ export const CartItem = ({product}: {product: Cart}) => {
                 <CartItemImage imageUrl={product.imageUrl} />
                 <CartItemInfo>
                     <p>{product.name}</p>
-                    <p>{product.price}</p>
+                    <p>R${product.price}</p>
 
                     <CartItemQuantity>
                         <AiOutlineMinus size={20} />
