@@ -8,6 +8,7 @@ interface ICartContext {
     products: Cart[];
     addProductToCart: (product: Product) => void;
     removeProductFromCart: (productId: string) => void;
+    addQuantityProductFromCart: (productId: string) => void;
 }
 
 export const CartContext = createContext<ICartContext>({
@@ -15,7 +16,8 @@ export const CartContext = createContext<ICartContext>({
     products: [],
     toggleCart: () => {},
     addProductToCart: () => {},
-    removeProductFromCart: () => {}
+    removeProductFromCart: () => {},
+    addQuantityProductFromCart: () => {}
 });
 
 export const CartContextProvider = ({children}: {children: ReactNode}) => {
@@ -37,12 +39,18 @@ export const CartContextProvider = ({children}: {children: ReactNode}) => {
         setProducts((products) => products.filter((product) => product.id != productId))
     }
 
+    const addQuantityProductFromCart = (productId: string) => {
+        const newProducts = products.map(product => 
+            product.id === productId ? {...product, quantity: product.quantity + 1} : product)
+        setProducts(newProducts);
+    }
+
     const toggleCart = () => {
         setIsVisible(!isVisible);
     }
 
     return (
-        <CartContext.Provider value={{isVisible, products, toggleCart, addProductToCart, removeProductFromCart}}>
+        <CartContext.Provider value={{isVisible, products, toggleCart, addProductToCart, removeProductFromCart, addQuantityProductFromCart}}>
             {children}
         </CartContext.Provider>
     );
