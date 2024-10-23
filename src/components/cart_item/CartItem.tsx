@@ -7,7 +7,7 @@ import { CartContext } from "../../contexts/CartContext";
 
 export const CartItem = ({product}: {product: Cart}) => {
 
-    const { removeProductFromCart, addQuantityProductFromCart } = useContext(CartContext);
+    const { removeProductFromCart, addQuantityProductFromCart, removeQuantityProductFromCart } = useContext(CartContext);
 
     return (
         <>
@@ -18,7 +18,7 @@ export const CartItem = ({product}: {product: Cart}) => {
                     <p>R${product.price}</p>
 
                     <CartItemQuantity>
-                        <AiOutlineMinus size={20} />
+                        <AiOutlineMinus onClick={() => removeQuantityProductFromCart(product.id)} size={20} />
                         <p>{product.quantity}</p>
                         <AiOutlinePlus onClick={() => addQuantityProductFromCart(product.id)} size={20} />
                     </CartItemQuantity>
