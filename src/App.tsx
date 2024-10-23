@@ -9,6 +9,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "./contexts/UserContext";
 import { getUserFirebase } from "./service/user-service";
 import { LoggedInGuard } from "./guards/Guards";
+import { ExplorePage } from "./pages/explorer/ExplorePage";
 
 const App = () => {
 
@@ -48,6 +49,8 @@ const App = () => {
             <Route path="/sign-up" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
           </Route>
+
+          <Route path="/explore" element={<ExplorePage />} />
 
         </Routes>
       </BrowserRouter>

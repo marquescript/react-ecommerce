@@ -25,7 +25,7 @@ export const Header = () => {
             <HeaderTitle>Ecommerce</HeaderTitle>
 
             <HeaderItems>
-                <HeaderItem onClick={() => handleLoginClick("/")}>Explorar</HeaderItem>
+                <HeaderItem onClick={() => handleLoginClick("/explore")}>Explorar</HeaderItem>
 
                 {!isAuthenticated && (
                     <>
