@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { signOutFirebase } from "../../service/user-service";
 import { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import { CustomButton } from "../buttom/CustomButton";
+import { CartContext } from "../../contexts/CartContext";
 
 
 export const Header = () => {
 
     const navigate = useNavigate();
-
+    const { toggleCart } = useContext(CartContext);
     const { isAuthenticated } = useContext(UserContext)
 
     const handleLoginClick = (route: string) => {
@@ -35,7 +35,9 @@ export const Header = () => {
                     </>
                 )}
 
-                <HeaderItem><BsCart3 size={25}/><span></span>5</HeaderItem>
+                <HeaderItem onClick={toggleCart}>
+                    <BsCart3 size={25}/><span>5</span>
+                </HeaderItem>
 
                 {isAuthenticated && (
                     <HeaderItem onClick={handleSignOutClick}>Sair</HeaderItem>
