@@ -28,6 +28,10 @@ export const HeaderItem = styled.div`
     display: flex;
     align-items: center;
 
+    span{
+        margin-right: 5px;
+    }
+
     &:nth-child(1),
     &:nth-child(2),
     &:nth-child(3){
