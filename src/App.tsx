@@ -10,6 +10,7 @@ import { UserContext } from "./contexts/UserContext";
 import { getUserFirebase } from "./service/user-service";
 import { LoggedInGuard } from "./guards/Guards";
 import { ExplorePage } from "./pages/explorer/ExplorePage";
+import { CategoryDetailsPage } from "./pages/category_details/CategoryDetailsPage";
 
 const App = () => {
 
@@ -49,7 +50,7 @@ const App = () => {
             <Route path="/sign-up" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
           </Route>
-
+          <Route path="/category/:id" element={<CategoryDetailsPage />}/>
           <Route path="/explore" element={<ExplorePage />} />
 
         </Routes>
