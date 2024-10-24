@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useMemo, useState } from "react";
+import { createContext, ReactNode, useEffect, useMemo, useState } from "react";
 import { Cart } from "../types/Cart";
 import { Product } from "../types/Product";
 
@@ -28,37 +28,48 @@ export const CartContext = createContext<ICartContext>({
 
 export const CartContextProvider = ({children}: {children: ReactNode}) => {
 
+    // Inicializando o estado dos produtos a partir do localStorage
+    const [products, setProducts] = useState<Cart[]>(() => {
+        const storedProducts = localStorage.getItem("cartProducts");
+        return storedProducts ? JSON.parse(storedProducts) : [];
+    });
+
     const [isVisible, setIsVisible] = useState(false);
-    const [products, setProducts] = useState<Cart[]>([]);
+
+    // Atualiza o localStorage sempre que o estado de 'products' mudar
+    useEffect(() => {
+        localStorage.setItem("cartProducts", JSON.stringify(products));
+    }, [products]);
 
     const totalPrice = useMemo(() => {
         return products.reduce((acc, current) => {
-        return acc + current.price * current.quantity;
-    }, 0)}, [products]);
+            return acc + current.price * current.quantity;
+        }, 0)
+    }, [products]);
 
     const totalQuantity = useMemo(() => {
         return products.reduce((acc, current) => {
             return acc + current.quantity;
-        }, 0)
-    }, [products])
+        }, 0);
+    }, [products]);
 
     const addProductToCart = (product: Product) => {
         const productInCart = products.some((item) => item.id === product.id);
-        if(productInCart){
-            const newProducts = products.map(item => item.id === product.id ? 
-                {...item, quantity: item.quantity + 1} : item);
+        if (productInCart) {
+            const newProducts = products.map(item => 
+                item.id === product.id ? {...item, quantity: item.quantity + 1} : item);
             return setProducts(newProducts);
         }
         setProducts([...products, {...product, quantity: 1}]);
     }
 
     const removeProductFromCart = (productId: string) => {
-        setProducts((products) => products.filter((product) => product.id != productId))
+        setProducts((products) => products.filter((product) => product.id !== productId));
     }
 
     const addQuantityProductFromCart = (productId: string) => {
         const newProducts = products.map(product => 
-            product.id === productId ? {...product, quantity: product.quantity + 1} : product)
+            product.id === productId ? {...product, quantity: product.quantity + 1} : product);
         setProducts(newProducts);
     }
 
@@ -66,18 +77,18 @@ export const CartContextProvider = ({children}: {children: ReactNode}) => {
         const newProducts = products.map(product => {
             if (product.id === productId) {
                 const updatedProduct = { ...product, quantity: product.quantity - 1 };
-    
+
                 if (updatedProduct.quantity === 0) {
-                    removeProductFromCart(productId); 
-                    return null; 
+                    removeProductFromCart(productId);
+                    return null;
                 }
-    
+
                 return updatedProduct;
             }
-    
+
             return product;
-        }).filter(product => product !== null); 
-    
+        }).filter(product => product !== null);
+
         setProducts(newProducts);
     };
 
@@ -96,9 +107,8 @@ export const CartContextProvider = ({children}: {children: ReactNode}) => {
             removeQuantityProductFromCart,
             totalPrice,
             totalQuantity
-            }}>
+        }}>
             {children}
         </CartContext.Provider>
     );
-
 }
