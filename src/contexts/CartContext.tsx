@@ -5,6 +5,7 @@ import { Product } from "../types/Product";
 interface ICartContext {
     isVisible: boolean;
     totalPrice: number;
+    totalQuantity: number;
     toggleCart: () => void;
     products: Cart[];
     addProductToCart: (product: Product) => void;
@@ -16,6 +17,7 @@ interface ICartContext {
 export const CartContext = createContext<ICartContext>({
     isVisible: false,
     totalPrice:  0,
+    totalQuantity: 0,
     products: [],
     toggleCart: () => {},
     addProductToCart: () => {},
@@ -33,6 +35,12 @@ export const CartContextProvider = ({children}: {children: ReactNode}) => {
         return products.reduce((acc, current) => {
         return acc + current.price * current.quantity;
     }, 0)}, [products]);
+
+    const totalQuantity = useMemo(() => {
+        return products.reduce((acc, current) => {
+            return acc + current.quantity;
+        }, 0)
+    }, [products])
 
     const addProductToCart = (product: Product) => {
         const productInCart = products.some((item) => item.id === product.id);
@@ -86,7 +94,8 @@ export const CartContextProvider = ({children}: {children: ReactNode}) => {
             removeProductFromCart, 
             addQuantityProductFromCart, 
             removeQuantityProductFromCart,
-            totalPrice
+            totalPrice,
+            totalQuantity
             }}>
             {children}
         </CartContext.Provider>

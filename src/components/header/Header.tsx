@@ -12,7 +12,7 @@ export const Header = () => {
     const navigate = useNavigate();
     const { toggleCart } = useContext(CartContext);
     const { isAuthenticated } = useContext(UserContext)
-    const { products } = useContext(CartContext);
+    const { totalQuantity } = useContext(CartContext);
 
     const handleLoginClick = (route: string) => {
         navigate(route);
@@ -22,13 +22,6 @@ export const Header = () => {
         signOutFirebase();
     }
 
-    const handleCalculateQuantityProductsInCart = () => {
-        let totalQuantity = 0;
-        products.forEach(product => {
-            totalQuantity += product.quantity;
-        });
-        return totalQuantity;
-    }
 
     return(
         <HeaderContainer>
@@ -45,7 +38,7 @@ export const Header = () => {
                 )}
 
                 <HeaderItem onClick={toggleCart}>
-                    <span>{handleCalculateQuantityProductsInCart()}</span>
+                    <span>{totalQuantity}</span>
                     <BsCart3 size={25}/>
                 </HeaderItem>
 
