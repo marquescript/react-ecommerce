@@ -8,7 +8,7 @@ import { auth } from "./config/firebase";
 import { useContext, useState } from "react";
 import { UserContext } from "./contexts/UserContext";
 import { getUserFirebase } from "./service/user-service";
-import { LoggedInGuard } from "./guards/Guards";
+import { CheckoutGuard, LoggedInGuard } from "./guards/Guards";
 import { ExplorePage } from "./pages/explorer/ExplorePage";
 import { CategoryDetailsPage } from "./pages/category_details/CategoryDetailsPage";
 import { Cart } from "./components/cart/Cart";
@@ -55,7 +55,9 @@ const App = () => {
           <Route path="/category/:id" element={<CategoryDetailsPage />}/>
           <Route path="/explore" element={<ExplorePage />} />
 
-            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route element={<CheckoutGuard isAuthenticated={isAuthenticated} />}>
+              <Route path="/checkout" element={<CheckoutPage />} />
+            </Route>
 
             
           </Routes>
