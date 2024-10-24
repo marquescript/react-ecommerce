@@ -28,7 +28,6 @@ export const CartContext = createContext<ICartContext>({
 
 export const CartContextProvider = ({children}: {children: ReactNode}) => {
 
-    // Inicializando o estado dos produtos a partir do localStorage
     const [products, setProducts] = useState<Cart[]>(() => {
         const storedProducts = localStorage.getItem("cartProducts");
         return storedProducts ? JSON.parse(storedProducts) : [];
@@ -36,7 +35,6 @@ export const CartContextProvider = ({children}: {children: ReactNode}) => {
 
     const [isVisible, setIsVisible] = useState(false);
 
-    // Atualiza o localStorage sempre que o estado de 'products' mudar
     useEffect(() => {
         localStorage.setItem("cartProducts", JSON.stringify(products));
     }, [products]);

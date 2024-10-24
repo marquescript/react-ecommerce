@@ -5,6 +5,8 @@ interface PrivateRouteProps {
     isAuthenticated: boolean;
 }
 
+
+
 export const LoggedInGuard: React.FC<PrivateRouteProps> = ({isAuthenticated}) => {
     return isAuthenticated ? <Navigate to="/" /> : <Outlet />;
 }

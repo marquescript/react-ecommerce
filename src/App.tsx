@@ -12,6 +12,7 @@ import { LoggedInGuard } from "./guards/Guards";
 import { ExplorePage } from "./pages/explorer/ExplorePage";
 import { CategoryDetailsPage } from "./pages/category_details/CategoryDetailsPage";
 import { Cart } from "./components/cart/Cart";
+import { CheckoutPage } from "./pages/checkout/CheckoutPage";
 
 const App = () => {
 
@@ -54,7 +55,10 @@ const App = () => {
           <Route path="/category/:id" element={<CategoryDetailsPage />}/>
           <Route path="/explore" element={<ExplorePage />} />
 
-        </Routes>
+            <Route path="/checkout" element={<CheckoutPage />} />
+
+            
+          </Routes>
 
         <Cart />
       </BrowserRouter>
